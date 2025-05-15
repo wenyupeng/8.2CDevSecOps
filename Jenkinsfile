@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                echo 'release version 1.0.0'
+                echo 'release version 1.0.1'
             }
         }
         stage('Checkout') {
