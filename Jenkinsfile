@@ -6,6 +6,11 @@ pipeline {
     }
 
     stages {
+        stage('Prepare') {
+            steps {
+                echo 'release version 1.0.0'
+            }
+        }
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/wenyupeng/8.2CDevSecOps.git'
