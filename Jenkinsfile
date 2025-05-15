@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: ' https://github.com/wenyupeng/8.2CDevSecOps.git'
+                git branch: 'main', url: 'https://github.com/wenyupeng/8.2CDevSecOps.git'
             }
         }
         stage('Install Dependencies') {
@@ -20,13 +20,16 @@ pipeline {
             steps {
                 sh 'npm test || true'
             }
-
             post {
                 success {
-                    sendEmail('Test', 'SUCCESS')
+                    script {
+                        sendEmail('Test', 'SUCCESS')
+                    }
                 }
                 failure {
-                    sendEmail('Test', 'FAILURE')
+                    script {
+                        sendEmail('Test', 'FAILURE')
+                    }
                 }
             }
         }
@@ -39,26 +42,29 @@ pipeline {
             steps {
                 sh 'npm audit || true'
             }
-
-            post{
+            post {
                 success {
-                    sendEmail('Security Scan', 'SUCCESS')
+                    script {
+                        sendEmail('NPM Audit', 'SUCCESS')
+                    }
                 }
                 failure {
-                    sendEmail('Security Scan', 'FAILURE')
+                    script {
+                        sendEmail('NPM Audit', 'FAILURE')
+                    }
                 }
             }
         }
         stage('SonarCloud Analysis') {
             tools {
-              jdk "jdk17"
+                jdk "jdk17"
             }
             environment {
                 scannerHome = tool 'Sonar-Scanner'
             }
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                   sh '/opt/sonar-scanner/bin/sonar-scanner'
+                    sh '/opt/sonar-scanner/bin/sonar-scanner'
                 }
             }
         }
